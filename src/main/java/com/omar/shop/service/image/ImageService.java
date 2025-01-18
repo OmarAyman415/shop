@@ -55,6 +55,7 @@ public class ImageService implements IImageService{
 
                 Image savedImage = imageRepository.save(image);
 
+                //Get the right download url after it has been saved to database
                 savedImage.setDownloadUrl(buildDownloadUrl + savedImage.getId());
                 imageRepository.save(savedImage);
 
@@ -67,7 +68,6 @@ public class ImageService implements IImageService{
 
             } catch( IOException | SQLException e){
                 throw new RuntimeException(e.getMessage());
-
             }
         }
 
