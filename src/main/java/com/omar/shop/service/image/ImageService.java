@@ -5,6 +5,7 @@ import com.omar.shop.exceptions.ResourceNotFoundException;
 import com.omar.shop.model.Image;
 import com.omar.shop.model.Product;
 import com.omar.shop.repository.ImageRepository;
+import com.omar.shop.service.product.IProductService;
 import com.omar.shop.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ import java.util.List;
 public class ImageService implements IImageService{
 
     private final ImageRepository imageRepository;
-    private final ProductService productService;
+    private final IProductService productService;
 
     @Override
     public Image getImageById(Long id) {
