@@ -1,6 +1,7 @@
 package com.omar.shop.service.product;
 
 import com.omar.shop.exceptions.ProductNotFoundException;
+import com.omar.shop.exceptions.ResourceNotFoundException;
 import com.omar.shop.model.Category;
 import com.omar.shop.model.Product;
 import com.omar.shop.repository.CategoryRepository;
@@ -34,30 +35,30 @@ public class ProductService implements IProductService {
     @Override
     public Product addProduct(AddProductRequest request) {
         /* Check if the category exists in the database.
-        * If yes, set it as new product category.
-        * If no, save it as new category and set product as new product category. */
-        Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
-                .orElseGet(()-> {
+         * If yes, set it as new product category.
+         * If no, save it as new category and set product as new product category. */
+        Category productCategory = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
+                .orElseGet(() -> {
                     Category newCategory = new Category(request.getCategory().getName());
                     return categoryRepository.save(newCategory);
                 });
 
-        request.setCategory(category);
+        request.setCategory(productCategory);
 
-        return productRepository.save(createProduct(request, category));
+        return productRepository.save(createProduct(request, productCategory));
     }
 
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(()-> new ProductNotFoundException("Product not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found!"));
     }
 
     @Override
     public void deleteProductById(Long id) {
         productRepository.findById(id)
-                .ifPresentOrElse(productRepository::delete, ()-> {
-                    throw new ProductNotFoundException("Product not found!");
+                .ifPresentOrElse(productRepository::delete, () -> {
+                    throw new ResourceNotFoundException("Product not found!");
                 });
     }
 
@@ -77,9 +78,9 @@ public class ProductService implements IProductService {
     @Override
     public Product updateProduct(UpdateProductRequest request, Long productId) {
         return productRepository.findById(productId)
-                .map(existingProduct -> updateExistingProduct(existingProduct, request))
+                .map(desiredProduct -> updateExistingProduct(desiredProduct, request))
                 .map(productRepository::save)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found!"));
     }
 
     @Override
