@@ -66,7 +66,7 @@ public class ProductController {
         try {
             Product newProduct = productService.addProduct(product);
             return ResponseEntity.ok(new ApiResponse("Product added successfully", newProduct));
-        } catch (ResourceNotFoundException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
     }

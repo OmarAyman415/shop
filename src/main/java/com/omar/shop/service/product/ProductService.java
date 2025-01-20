@@ -1,5 +1,6 @@
 package com.omar.shop.service.product;
 
+import com.omar.shop.exceptions.AlreadyExistException;
 import com.omar.shop.exceptions.ResourceNotFoundException;
 import com.omar.shop.model.Category;
 import com.omar.shop.model.Product;
@@ -33,6 +34,10 @@ public class ProductService implements IProductService {
 
     @Override
     public Product addProduct(AddProductRequest request) {
+
+        if (productRepository.existsByName(request.getName())) {
+            throw new AlreadyExistException("Product with name: " + request.getName() + " already exists");
+        }
         /* Check if the category exists in the database.
          * If yes, set it as new product category.
          * If no, save it as new category and set product as new product category. */
