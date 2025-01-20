@@ -1,6 +1,5 @@
 package com.omar.shop.service.product;
 
-import com.omar.shop.exceptions.ProductNotFoundException;
 import com.omar.shop.exceptions.ResourceNotFoundException;
 import com.omar.shop.model.Category;
 import com.omar.shop.model.Product;
