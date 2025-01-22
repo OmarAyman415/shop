@@ -60,7 +60,7 @@ CREATE DATABASE shop_db;
 
 2. Update `application.properties` or `application.yml` with your database credentials:
 ```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/shop_db
+spring.datasource.url=jdbc:postgresql://localhost:5432/shop
 spring.datasource.username=your_username
 spring.datasource.password=your_password
 spring.jpa.hibernate.ddl-auto=update
