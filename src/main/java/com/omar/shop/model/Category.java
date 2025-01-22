@@ -23,7 +23,7 @@ public class Category {
     private long id;
     private String name;
 
-    @OneToMany(mappedBy = "category")
+
     /* to avoid infinite loop oof showing category's products and product's category and so on,
      we need to use this annotation as it provides in product list only the IDs
         {
@@ -79,6 +79,7 @@ public class Category {
 
 
     */
+    @OneToMany(mappedBy = "category")
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
     private List<Product> products;

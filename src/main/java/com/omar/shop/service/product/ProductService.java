@@ -17,7 +17,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProductService implements IProductService {
-
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
@@ -34,7 +33,6 @@ public class ProductService implements IProductService {
 
     @Override
     public Product addProduct(AddProductRequest request) {
-
         if (productRepository.existsByName(request.getName())) {
             throw new AlreadyExistException("Product with name: " + request.getName() + " already exists");
         }
@@ -120,5 +118,10 @@ public class ProductService implements IProductService {
     @Override
     public Long countProductsByBrandAndName(String brand, String name) {
         return productRepository.countByBrandAndName(brand, name);
+    }
+
+    @Override
+    public Long countProductsByBrand(String brand) {
+        return productRepository.countByBrand(brand);
     }
 }

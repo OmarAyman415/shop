@@ -43,7 +43,7 @@ public class ProductController {
      * @return a response entity containing the product
      * @throws ResourceNotFoundException if the product does not exist
      */
-    @GetMapping("/product/{productId}/product")
+    @GetMapping("/{productId}/product")
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long productId) {
         try {
             Product theProduct = productService.getProductById(productId);
@@ -92,7 +92,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/products/by/brand-adn-name")
+    @GetMapping("/by/brand-and-name")
     public ResponseEntity<ApiResponse> getProductsByBrandAndName(@RequestParam String brand, @RequestParam String name) {
         try {
             List<Product> theProducts = productService.getProductsByBrandAndName(brand, name);
@@ -105,7 +105,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/products/by/category-and-brand")
+    @GetMapping("/by/category-and-brand")
     public ResponseEntity<ApiResponse> getProductsByCategoryAndBrand(@RequestParam String category, @RequestParam String brand) {
         try {
             List<Product> theProducts = productService.getProductsByCategoryAndBrand(category, brand);
@@ -118,8 +118,8 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/products/{name}/products")
-    public ResponseEntity<ApiResponse> getProductsByName(@PathVariable String name) {
+    @GetMapping("/by-name/products")
+    public ResponseEntity<ApiResponse> getProductsByName(@RequestParam String name) {
         try {
             List<Product> theProducts = productService.getProductsByName(name);
             if (theProducts.isEmpty()) {
@@ -131,7 +131,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/products/by-brand")
+    @GetMapping("/by-brand")
     public ResponseEntity<ApiResponse> getProductsByBrand(@RequestParam String brand) {
         try {
             List<Product> theProducts = productService.getProductsByBrand(brand);
@@ -144,9 +144,10 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/products/{category}/all/products")
+    @GetMapping("/{category}/all/products")
     public ResponseEntity<ApiResponse> getProductsByCategory(@PathVariable String category) {
         try {
+            System.out.println("This category: " + category);
             List<Product> theProducts = productService.getProductsByCategory(category);
             if (theProducts.isEmpty()) {
                 return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Products not found", null));
@@ -157,10 +158,20 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/products/count/by-brand/and-name")
+    @GetMapping("/count/by-brand-and-name")
     public ResponseEntity<ApiResponse> countProductsByBrandAndName(@RequestParam String brand, @RequestParam String name) {
         try {
             Long productCount = productService.countProductsByBrandAndName(brand, name);
+            return ResponseEntity.ok(new ApiResponse("Products count retrieved successfully", productCount));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/count/by-brand")
+    public ResponseEntity<ApiResponse> countProductsByBrand(@RequestParam String brand) {
+        try {
+            Long productCount = productService.countProductsByBrand(brand);
             return ResponseEntity.ok(new ApiResponse("Products count retrieved successfully", productCount));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));

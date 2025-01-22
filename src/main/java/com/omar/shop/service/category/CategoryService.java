@@ -12,14 +12,14 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryService implements ICategoryService{
+public class CategoryService implements ICategoryService {
 
     private final CategoryRepository categoryRepository;
 
     @Override
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Category with id: " + id + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category with id: " + id + " not found"));
     }
 
     @Override
@@ -41,17 +41,19 @@ public class CategoryService implements ICategoryService{
 
     @Override
     public Category updateCategory(Category category, Long id) {
-        return Optional.ofNullable(getCategoryById(id)).map(oldCategory ->{
+        return Optional.ofNullable(getCategoryById(id)).map(oldCategory -> {
             oldCategory.setName(category.getName());
             return categoryRepository.save(oldCategory);
         }).orElseThrow(() -> new ResourceNotFoundException("Category with id: " + id + " not found"));
     }
 
     @Override
-    public void deleteCategory(Long id) {
+    public String deleteCategory(Long id) {
+        String deletedCategory = getCategoryById(id).getName();
         categoryRepository.findById(id)
-                .ifPresentOrElse(categoryRepository::delete,()->{
+                .ifPresentOrElse(categoryRepository::delete, () -> {
                     throw new ResourceNotFoundException("Category with id: " + id + " not found");
                 });
+        return deletedCategory;
     }
 }

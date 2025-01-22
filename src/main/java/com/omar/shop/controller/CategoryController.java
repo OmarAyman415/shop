@@ -21,7 +21,7 @@ public class CategoryController {
     private final ICategoryService categoryService;
 
     @GetMapping("/all")
-    public ResponseEntity<ApiResponse> getAllCategories(){
+    public ResponseEntity<ApiResponse> getAllCategories() {
         try {
             List<Category> categories = categoryService.getAllCategories();
             return ResponseEntity.ok(new ApiResponse("Categories retrieved successfully", categories));
@@ -31,7 +31,7 @@ public class CategoryController {
     }
 
     @PostMapping("/add")
-    public  ResponseEntity<ApiResponse> addCategory(@RequestBody Category name){
+    public ResponseEntity<ApiResponse> addCategory(@RequestBody Category name) {
         try {
             Category theCategory = categoryService.addCategory(name);
             return ResponseEntity.ok(new ApiResponse("Category added successfully", theCategory));
@@ -40,8 +40,8 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/category/{id}/category")
-    public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long id){
+    @GetMapping("/{id}/category")
+    public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long id) {
         try {
             Category theCategory = categoryService.getCategoryById(id);
             return ResponseEntity.ok(new ApiResponse("Category retrieved successfully", theCategory));
@@ -50,8 +50,8 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/category/{name}/category")
-    public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String name){
+    @GetMapping("/by-name/category")
+    public ResponseEntity<ApiResponse> getCategoryByName(@RequestParam String name) {
         try {
             Category theCategory = categoryService.getCategoryByName(name);
             return ResponseEntity.ok(new ApiResponse("Category retrieved successfully", theCategory));
@@ -60,18 +60,18 @@ public class CategoryController {
         }
     }
 
-    @DeleteMapping("category/{id}/delete")
-    public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long id){
+    @DeleteMapping("{id}/delete")
+    public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long id) {
         try {
-            categoryService.deleteCategory(id);
-            return ResponseEntity.ok(new ApiResponse("Found", null));
+            String deletedCategory = categoryService.deleteCategory(id);
+            return ResponseEntity.ok(new ApiResponse(deletedCategory + " Deleted", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
-    @PutMapping("category/{id}/update")
-    public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id, @RequestBody Category category){
+    @PutMapping("{id}/update")
+    public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id, @RequestBody Category category) {
         try {
             Category theCategory = categoryService.updateCategory(category, id);
             return ResponseEntity.ok(new ApiResponse("Category updated successfully", theCategory));
