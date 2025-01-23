@@ -47,7 +47,7 @@ This is a **Shop Project** built using Spring Boot and PostgreSQL. It serves as 
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/Omarauman415/shop.git
+git clone https://github.com/Omarayman415/shop.git
 cd shop-project
 ```
 
