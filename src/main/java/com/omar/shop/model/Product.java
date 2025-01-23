@@ -27,10 +27,7 @@ public class Product {
     private String description;
     private BigDecimal price;
     private int inventory;
-
-    //    only enable those annotations if you want to get full details of the category
-//    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-//    @JsonIdentityReference(alwaysAsId = true)
+    
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;

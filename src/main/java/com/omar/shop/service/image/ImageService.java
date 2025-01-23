@@ -19,7 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ImageService implements IImageService{
+public class ImageService implements IImageService {
 
     private final ImageRepository imageRepository;
     private final IProductService productService;
@@ -33,7 +33,7 @@ public class ImageService implements IImageService{
     @Override
     public void deleteImageById(Long id) {
         imageRepository.findById(id)
-                .ifPresentOrElse(imageRepository::delete,() -> {
+                .ifPresentOrElse(imageRepository::delete, () -> {
                     throw new ResourceNotFoundException("Image not found with id " + id);
                 });
     }
@@ -42,8 +42,8 @@ public class ImageService implements IImageService{
     public List<ImageDto> saveImages(List<MultipartFile> files, Long productId) {
         Product product = productService.getProductById(productId);
         List<ImageDto> savedImageDtos = new ArrayList<>();
-        for( MultipartFile file : files){
-            try{
+        for (MultipartFile file : files) {
+            try {
                 Image image = new Image();
                 image.setFileName(file.getName());
                 image.setFileType(file.getContentType());
@@ -61,13 +61,13 @@ public class ImageService implements IImageService{
                 imageRepository.save(savedImage);
 
                 ImageDto imageDto = new ImageDto();
-                imageDto.setImageId(savedImage.getId());
-                imageDto.setImageName(savedImage.getFileName());
+                imageDto.setId(savedImage.getId());
+                imageDto.setFileName(savedImage.getFileName());
                 imageDto.setDownloadUrl(savedImage.getDownloadUrl());
 
                 savedImageDtos.add(imageDto);
 
-            } catch( IOException | SQLException e){
+            } catch (IOException | SQLException e) {
                 throw new RuntimeException(e.getMessage());
             }
         }

@@ -1,14 +1,19 @@
 package com.omar.shop.service.product;
 
+import com.omar.shop.dto.ImageDto;
+import com.omar.shop.dto.ProductDto;
 import com.omar.shop.exceptions.AlreadyExistException;
 import com.omar.shop.exceptions.ResourceNotFoundException;
 import com.omar.shop.model.Category;
+import com.omar.shop.model.Image;
 import com.omar.shop.model.Product;
 import com.omar.shop.repository.CategoryRepository;
+import com.omar.shop.repository.ImageRepository;
 import com.omar.shop.repository.ProductRepository;
 import com.omar.shop.request.AddProductRequest;
 import com.omar.shop.request.UpdateProductRequest;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +24,9 @@ import java.util.Optional;
 public class ProductService implements IProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+
+    private final ModelMapper modelMapper;
+    private final ImageRepository imageRepository;
 
     private Product createProduct(AddProductRequest request, Category category) {
         return new Product(
@@ -123,5 +131,21 @@ public class ProductService implements IProductService {
     @Override
     public Long countProductsByBrand(String brand) {
         return productRepository.countByBrand(brand);
+    }
+
+    @Override
+    public List<ProductDto> getConvertedProducts(List<Product> products) {
+        return products.stream().map(this::convertToDto).toList();
+    }
+
+    @Override
+    public ProductDto convertToDto(Product product) {
+        ProductDto productDto = modelMapper.map(product, ProductDto.class);
+        List<Image> images = imageRepository.findByProductId(product.getId());
+        List<ImageDto> imageDtos = images.stream()
+                .map(image -> modelMapper.map(image, ImageDto.class))
+                .toList();
+        productDto.setImages(imageDtos);
+        return productDto;
     }
 }

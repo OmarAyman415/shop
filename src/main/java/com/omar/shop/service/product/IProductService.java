@@ -1,5 +1,6 @@
 package com.omar.shop.service.product;
 
+import com.omar.shop.dto.ProductDto;
 import com.omar.shop.model.Product;
 import com.omar.shop.request.AddProductRequest;
 import com.omar.shop.request.UpdateProductRequest;
@@ -30,4 +31,8 @@ public interface IProductService {
     Long countProductsByBrandAndName(String Brand, String name);
 
     Long countProductsByBrand(String brand);
+
+    List<ProductDto> getConvertedProducts(List<Product> products);
+
+    ProductDto convertToDto(Product product);
 }
