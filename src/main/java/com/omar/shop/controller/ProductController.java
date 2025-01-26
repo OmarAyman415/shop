@@ -113,8 +113,8 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/by/category-and-brand")
     @Transactional
+    @GetMapping("/by/category-and-brand")
     public ResponseEntity<ApiResponse> getProductsByCategoryAndBrand(@RequestParam String category, @RequestParam String brand) {
         try {
             List<Product> theProducts = productService.getProductsByCategoryAndBrand(category, brand);
@@ -158,8 +158,8 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/{category}/all/products")
     @Transactional
+    @GetMapping("/{category}/all/products")
     public ResponseEntity<ApiResponse> getProductsByCategory(@PathVariable String category) {
         try {
             System.out.println("This category: " + category);
