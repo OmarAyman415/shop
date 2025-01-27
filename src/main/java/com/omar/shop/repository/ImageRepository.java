@@ -1,7 +1,6 @@
 package com.omar.shop.repository;
 
 import com.omar.shop.model.Image;
-import com.omar.shop.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

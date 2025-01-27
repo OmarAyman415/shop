@@ -15,11 +15,13 @@ import java.util.Optional;
 public class CategoryService implements ICategoryService {
 
     private final CategoryRepository categoryRepository;
+    private static final String CATEGORY = "Category with id: ";
+    private static final String NOTFOUND = " not found";
 
     @Override
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Category with id: " + id + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(CATEGORY + id + NOTFOUND));
     }
 
     @Override
@@ -44,7 +46,7 @@ public class CategoryService implements ICategoryService {
         return Optional.ofNullable(getCategoryById(id)).map(oldCategory -> {
             oldCategory.setName(category.getName());
             return categoryRepository.save(oldCategory);
-        }).orElseThrow(() -> new ResourceNotFoundException("Category with id: " + id + " not found"));
+        }).orElseThrow(() -> new ResourceNotFoundException(CategoryService.CATEGORY + id + NOTFOUND));
     }
 
     @Override
@@ -52,7 +54,7 @@ public class CategoryService implements ICategoryService {
         String deletedCategory = getCategoryById(id).getName();
         categoryRepository.findById(id)
                 .ifPresentOrElse(categoryRepository::delete, () -> {
-                    throw new ResourceNotFoundException("Category with id: " + id + " not found");
+                    throw new ResourceNotFoundException(CATEGORY + id + NOTFOUND);
                 });
         return deletedCategory;
     }

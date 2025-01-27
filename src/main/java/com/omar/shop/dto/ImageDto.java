@@ -1,8 +1,6 @@
 package com.omar.shop.dto;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 

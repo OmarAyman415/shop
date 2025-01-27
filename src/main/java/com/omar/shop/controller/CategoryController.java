@@ -6,7 +6,6 @@ import com.omar.shop.model.Category;
 import com.omar.shop.response.ApiResponse;
 import com.omar.shop.service.category.ICategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

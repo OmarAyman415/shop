@@ -2,7 +2,6 @@ package com.omar.shop.service.cart;
 
 import com.omar.shop.exceptions.ResourceNotFoundException;
 import com.omar.shop.model.Cart;
-import com.omar.shop.model.CartItem;
 import com.omar.shop.repository.CartItemRepository;
 import com.omar.shop.repository.CartRepository;
 import lombok.RequiredArgsConstructor;

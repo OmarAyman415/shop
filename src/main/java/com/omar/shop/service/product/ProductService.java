@@ -28,6 +28,8 @@ public class ProductService implements IProductService {
     private final ModelMapper modelMapper;
     private final ImageRepository imageRepository;
 
+    public static final String PRODUCT_NOT_FOUND = "Product not found";
+
     private Product createProduct(AddProductRequest request, Category category) {
         return new Product(
                 request.getName(),
@@ -61,14 +63,14 @@ public class ProductService implements IProductService {
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
     }
 
     @Override
     public void deleteProductById(Long id) {
         productRepository.findById(id)
                 .ifPresentOrElse(productRepository::delete, () -> {
-                    throw new ResourceNotFoundException("Product not found!");
+                    throw new ResourceNotFoundException(PRODUCT_NOT_FOUND);
                 });
     }
 
@@ -90,7 +92,7 @@ public class ProductService implements IProductService {
         return productRepository.findById(productId)
                 .map(desiredProduct -> updateExistingProduct(desiredProduct, request))
                 .map(productRepository::save)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
     }
 
     @Override

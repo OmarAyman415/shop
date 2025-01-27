@@ -3,7 +3,6 @@ package com.omar.shop.service.category;
 import com.omar.shop.model.Category;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ICategoryService {
     Category getCategoryById(Long id);

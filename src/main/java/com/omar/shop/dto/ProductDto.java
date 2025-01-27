@@ -1,11 +1,6 @@
 package com.omar.shop.dto;
 
 import com.omar.shop.model.Category;
-import com.omar.shop.model.Image;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.Data;
 
 import java.math.BigDecimal;

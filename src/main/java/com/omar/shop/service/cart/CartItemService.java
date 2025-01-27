@@ -20,7 +20,6 @@ public class CartItemService implements ICartItemService {
     private final ICartService cartService;
     private final IProductService productService;
 
-    final
     @Override
     public void addItemToCart(Long cartId, Long productId, int quantity) {
         Cart cart = cartService.getCart(cartId);

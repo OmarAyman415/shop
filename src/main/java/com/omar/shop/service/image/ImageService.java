@@ -6,7 +6,6 @@ import com.omar.shop.model.Image;
 import com.omar.shop.model.Product;
 import com.omar.shop.repository.ImageRepository;
 import com.omar.shop.service.product.IProductService;
-import com.omar.shop.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,7 +46,7 @@ public class ImageService implements IImageService {
                 Image image = new Image();
                 image.setFileName(file.getName());
                 image.setFileType(file.getContentType());
-                image.setImage(new SerialBlob(file.getBytes()));
+                image.setImageFile(new SerialBlob(file.getBytes()));
                 image.setProduct(product);
 
                 String buildDownloadUrl = "/api/v1/images/image/download/";
@@ -81,7 +80,7 @@ public class ImageService implements IImageService {
         try {
             image.setFileType(file.getContentType());
             image.setFileName(file.getOriginalFilename());
-            image.setImage(new SerialBlob(file.getBytes()));
+            image.setImageFile(new SerialBlob(file.getBytes()));
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e.getMessage());
         }

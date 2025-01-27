@@ -44,7 +44,7 @@ public class ImageController {
     public ResponseEntity<Resource> downloadImage(@PathVariable Long imageId) throws SQLException {
         Image image = imageService.getImageById(imageId);
         //best suitable way to send files throw json response
-        ByteArrayResource resource = new ByteArrayResource(image.getImage().getBytes(1, (int) image.getImage().length()));
+        ByteArrayResource resource = new ByteArrayResource(image.getImageFile().getBytes(1, (int) image.getImageFile().length()));
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(image.getFileType()))

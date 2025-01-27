@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RequiredArgsConstructor
