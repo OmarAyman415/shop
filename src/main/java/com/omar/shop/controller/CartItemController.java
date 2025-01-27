@@ -3,6 +3,7 @@ package com.omar.shop.controller;
 import com.omar.shop.exceptions.ResourceNotFoundException;
 import com.omar.shop.response.ApiResponse;
 import com.omar.shop.service.cart.ICartItemService;
+import com.omar.shop.service.cart.ICartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +15,17 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequestMapping("${api.prefix}/cartItems")
 public class CartItemController {
     private final ICartItemService cartItemService;
+    private final ICartService cartService;
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam Long cartId,
+    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam(required = false) Long cartId,
                                                      @RequestParam Long productId,
                                                      @RequestParam Integer quantity) {
         try {
+
+            if (cartId == null) {
+                cartId = cartService.initializeNewCart();
+            }
             cartItemService.addItemToCart(cartId, productId, quantity);
             return ResponseEntity.ok(new ApiResponse("Item added to The cart successfully", null));
         } catch (ResourceNotFoundException e) {

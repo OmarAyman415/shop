@@ -10,7 +10,6 @@ import com.omar.shop.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -65,15 +64,15 @@ public class CartItemService implements ICartItemService {
                 .stream()
                 .filter(itemExistsInCart -> itemExistsInCart.getProduct().getId().equals(productId))
                 .findFirst()
-                .ifPresent(item -> {
+                .ifPresentOrElse(item -> {
                     item.setQuantity(quantity);
                     item.setUnitPrice(item.getProduct().getPrice());
                     item.setTotalPrice();
+                }, () -> {
+                    throw new ResourceNotFoundException("Item not found");
                 });
 
-        BigDecimal totalAmount = cart.getTotalAmount();
-        cart.setTotalAmount(totalAmount);
-
+        cart.updateTotalAmount();
         cartRepository.save(cart);
     }
 
