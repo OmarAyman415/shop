@@ -1,11 +1,14 @@
 package com.omar.shop.controller;
 
+import com.omar.shop.dto.CartDto;
 import com.omar.shop.exceptions.ResourceNotFoundException;
 import com.omar.shop.model.Cart;
 import com.omar.shop.response.ApiResponse;
 import com.omar.shop.service.cart.ICartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -18,11 +21,13 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class CartController {
     private final ICartService cartService;
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @GetMapping("/{cardId}/my-cart")
     public ResponseEntity<ApiResponse> getCart(@PathVariable Long cardId) {
         try {
             Cart cart = cartService.getCart(cardId);
-            return ResponseEntity.ok(new ApiResponse("Cart retrieved successfully", cart));
+            CartDto cartDto = cartService.convertToCartDto(cart);
+            return ResponseEntity.ok(new ApiResponse("Cart retrieved successfully", cartDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }

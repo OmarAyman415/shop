@@ -1,5 +1,6 @@
 package com.omar.shop.service.cart;
 
+import com.omar.shop.dto.CartDto;
 import com.omar.shop.model.Cart;
 
 import java.math.BigDecimal;
@@ -12,4 +13,6 @@ public interface ICartService {
     BigDecimal getTotalPrice(Long id);
 
     Long initializeNewCart();
+
+    CartDto convertToCartDto(Cart cart);
 }
