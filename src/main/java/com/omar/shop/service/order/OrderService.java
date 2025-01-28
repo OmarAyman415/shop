@@ -2,17 +2,16 @@ package com.omar.shop.service.order;
 
 import com.omar.shop.enums.OrderStatus;
 import com.omar.shop.exceptions.ResourceNotFoundException;
-import com.omar.shop.model.Cart;
-import com.omar.shop.model.Order;
-import com.omar.shop.model.OrderItem;
-import com.omar.shop.model.Product;
+import com.omar.shop.model.*;
 import com.omar.shop.repository.OrderRepository;
 import com.omar.shop.repository.ProductRepository;
+import com.omar.shop.service.cart.ICartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -20,15 +19,28 @@ import java.util.List;
 public class OrderService implements IOrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final ICartService cartService;
 
     @Override
     public Order placeOrder(Long userId) {
-        return null;
+        Cart cart = cartService.getCartByUserId(userId);
+
+        Order order = createOrder(cart);
+        List<OrderItem> orderItems = createOrderItems(order, cart);
+
+        order.setOrderItems(new HashSet<>(orderItems));
+        order.setTotalAmount(calculateTotalAmount(orderItems));
+
+        Order savedOrder = orderRepository.save(order);
+        cartService.clearCart(cart.getId());
+
+        return savedOrder;
     }
 
     private Order createOrder(Cart cart) {
         Order order = new Order();
-        // TODO: Add user id to order
+
+        order.setUser(cart.getUser());
         order.setOrderStatus(OrderStatus.PENDING);
         order.setOrderDate(LocalDate.now());
         return order;
@@ -56,15 +68,19 @@ public class OrderService implements IOrderService {
 
     private BigDecimal calculateTotalAmount(List<OrderItem> orderItems) {
         return orderItems.stream()
-                .map(orderItem -> {
-                    return orderItem.getPrice()
-                            .multiply(BigDecimal.valueOf(orderItem.getQuantity()));
-                }).reduce(BigDecimal.ZERO, BigDecimal::add);
+                .map(orderItem -> orderItem.getPrice()
+                        .multiply(BigDecimal.valueOf(orderItem.getQuantity()))
+                ).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @Override
     public Order getOrder(Long orderId) {
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+    }
+
+    @Override
+    public List<Order> getUserOrders(Long userId) {
+        return orderRepository.findByUserId(userId);
     }
 }

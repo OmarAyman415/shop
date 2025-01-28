@@ -71,6 +71,11 @@ public class CartService implements ICartService {
         return cartDto;
     }
 
+    @Override
+    public Cart getCartByUserId(Long userId) {
+        return cartRepository.findByUserId(userId);
+    }
+
     private List<CartItemDto> convertProductToProductDto(Set<CartItem> cartItems) {
         List<CartItemDto> cartItemDtos = new ArrayList<>();
         cartItems.forEach(cartItem -> {
