@@ -9,7 +9,6 @@ public interface ICartItemService {
 
     void updateItemQuantity(Long cartId, Long productId, int quantity);
 
-
     CartItem getCartItemById(Long cartId, Long productId);
 
 

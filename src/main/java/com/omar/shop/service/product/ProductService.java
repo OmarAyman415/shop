@@ -49,16 +49,22 @@ public class ProductService implements IProductService {
         /* Check if the category exists in the database.
          * If yes, set it as new product category.
          * If no, save it as new category and set product as new product category. */
-        Category productCategory = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
+        Category productCategory = findOrCreateCategory(request);
+
+        request.setCategory(productCategory);
+
+        Product newProduct = createProduct(request, productCategory);
+        return productRepository.save(newProduct);
+    }
+
+    private Category findOrCreateCategory(AddProductRequest request) {
+        return Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
                 .orElseGet(() -> {
                     Category newCategory = new Category(request.getCategory().getName());
                     return categoryRepository.save(newCategory);
                 });
-
-        request.setCategory(productCategory);
-
-        return productRepository.save(createProduct(request, productCategory));
     }
+
 
     @Override
     public Product getProductById(Long id) {
