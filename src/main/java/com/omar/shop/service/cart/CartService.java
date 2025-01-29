@@ -63,17 +63,18 @@ public class CartService implements ICartService {
         return savedCart.getId();
     }
 
+
+    @Override
+    public Cart getCartByUserId(Long userId) {
+        return cartRepository.findByUserId(userId);
+    }
+
     @Override
     public CartDto convertToCartDto(Cart cart) {
         List<CartItemDto> cartItemDtos = convertProductToProductDto(cart.getItems());
         CartDto cartDto = modelMapper.map(cart, CartDto.class);
         cartDto.setItems(new HashSet<>(cartItemDtos));
         return cartDto;
-    }
-
-    @Override
-    public Cart getCartByUserId(Long userId) {
-        return cartRepository.findByUserId(userId);
     }
 
     private List<CartItemDto> convertProductToProductDto(Set<CartItem> cartItems) {
