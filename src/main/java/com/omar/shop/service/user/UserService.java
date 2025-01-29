@@ -1,5 +1,6 @@
 package com.omar.shop.service.user;
 
+import com.omar.shop.dto.UserDto;
 import com.omar.shop.exceptions.AlreadyExistException;
 import com.omar.shop.exceptions.ResourceNotFoundException;
 import com.omar.shop.model.User;
@@ -7,6 +8,7 @@ import com.omar.shop.repository.UserRepository;
 import com.omar.shop.request.CreateUserRequest;
 import com.omar.shop.request.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,6 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService implements IUserService {
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
     public static final String USER_NOT_FOUND = "User not found!";
 
     @Override
@@ -60,5 +63,10 @@ public class UserService implements IUserService {
                     throw new ResourceNotFoundException(USER_NOT_FOUND);
                 });
 
+    }
+
+    @Override
+    public UserDto convertToDto(User user) {
+        return modelMapper.map(user, UserDto.class);
     }
 }

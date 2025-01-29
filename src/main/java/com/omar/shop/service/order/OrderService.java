@@ -47,7 +47,7 @@ public class OrderService implements IOrderService {
         Order order = new Order();
 
         order.setUser(cart.getUser());
-        order.setOrderStatus(OrderStatus.PENDING);
+        order.setStatus(OrderStatus.PENDING);
         order.setOrderDate(LocalDate.now());
         return order;
     }
@@ -95,7 +95,8 @@ public class OrderService implements IOrderService {
                 .toList();
     }
 
-    private OrderDto convertToDto(Order order) {
+    @Override
+    public OrderDto convertToDto(Order order) {
         return modelMapper.map(order, OrderDto.class);
     }
 }

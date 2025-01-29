@@ -5,6 +5,7 @@ import com.omar.shop.dto.CartItemDto;
 import com.omar.shop.exceptions.ResourceNotFoundException;
 import com.omar.shop.model.Cart;
 import com.omar.shop.model.CartItem;
+import com.omar.shop.model.User;
 import com.omar.shop.repository.CartItemRepository;
 import com.omar.shop.repository.CartRepository;
 import com.omar.shop.service.product.ProductService;
@@ -14,10 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +43,7 @@ public class CartService implements ICartService {
 
         cartItemRepository.deleteAllByCartId(cardId);
         cart.getItems().clear();
-
+        cart.setTotalAmount(BigDecimal.ZERO);
         cartRepository.deleteById(cardId);
     }
 
@@ -57,10 +55,13 @@ public class CartService implements ICartService {
     }
 
     @Override
-    public Long initializeNewCart() {
-        Cart newCart = new Cart();
-        Cart savedCart = cartRepository.save(newCart);
-        return savedCart.getId();
+    public Cart initializeNewCart(User user) {
+        return Optional.ofNullable(cartRepository.findByUserId(user.getId()))
+                .orElseGet(() -> {
+                    Cart cart = new Cart();
+                    cart.setUser(user);
+                    return cartRepository.save(cart);
+                });
     }
 
 
