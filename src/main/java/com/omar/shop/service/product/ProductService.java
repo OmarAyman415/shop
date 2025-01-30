@@ -43,7 +43,7 @@ public class ProductService implements IProductService {
 
     @Override
     public Product addProduct(AddProductRequest request) {
-        if (productRepository.existsByName(request.getName())) {
+        if (isProductExist(request.getName(), request.getBrand())) {
             throw new AlreadyExistException("Product with name: " + request.getName() + " already exists");
         }
         /* Check if the category exists in the database.
@@ -55,6 +55,10 @@ public class ProductService implements IProductService {
 
         Product newProduct = createProduct(request, productCategory);
         return productRepository.save(newProduct);
+    }
+
+    private Boolean isProductExist(String productName, String brand) {
+        return productRepository.existsByNameAndBrand(productName, brand);
     }
 
     private Category findOrCreateCategory(AddProductRequest request) {
