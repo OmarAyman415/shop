@@ -18,8 +18,6 @@ This is a **Shop Project** built using Spring Boot and PostgreSQL. It serves as 
 - **Environment Configuration**: Supports `.env` files using `spring-dotenv`.
 - **Exception Handling**: Robust error handling with meaningful messages.
 - **Spring Security**: Basic authentication and role-based access control.
-- **Docker Support**: Easily deploy using Docker.
-
 ---
 
 ## Technologies Used
