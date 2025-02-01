@@ -43,7 +43,9 @@ public class ProductService implements IProductService {
 
     @Override
     public Product addProduct(AddProductRequest request) {
-        if (isProductExist(request.getName(), request.getBrand())) {
+        if (Boolean.TRUE
+                .equals(isProductExist(request.getName(), request.getBrand()))
+        ) {
             throw new AlreadyExistException("Product with name: " + request.getName() + " already exists");
         }
         /* Check if the category exists in the database.

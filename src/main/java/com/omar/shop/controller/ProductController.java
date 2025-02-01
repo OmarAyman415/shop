@@ -11,6 +11,7 @@ import com.omar.shop.response.ApiResponse;
 import com.omar.shop.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,14 +41,6 @@ public class ProductController {
         }
     }
 
-
-    /**
-     * Returns a product by the given product id.
-     *
-     * @param productId the product id
-     * @return a response entity containing the product
-     * @throws ResourceNotFoundException if the product does not exist
-     */
     @Transactional
     @GetMapping("/{productId}/product")
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long productId) {
@@ -61,13 +54,7 @@ public class ProductController {
         }
     }
 
-    /**
-     * Adds a new product with the given information.
-     *
-     * @param product the product information
-     * @return a response entity containing the newly added product
-     * @throws ResourceNotFoundException if the product could be added
-     */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product) {
         try {
@@ -78,6 +65,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/product/{productId}/update")
     public ResponseEntity<ApiResponse> updateProduct(@PathVariable Long productId, @RequestBody UpdateProductRequest product) {
         try {
@@ -88,7 +76,7 @@ public class ProductController {
         }
     }
 
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/product/{productId}/delete")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId) {
         try {
